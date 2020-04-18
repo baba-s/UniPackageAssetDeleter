@@ -4,18 +4,34 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEngine;
 
-namespace KoganeUnityEditorLib
+namespace UniPackageAssetDeleter
 {
-	public static class UnityPackageAssetDeleter
+	/// <summary>
+	/// 選択した .unitypackage からインポートしたアセットを削除するエディタ拡張
+	/// </summary>
+	internal static class PackageAssetDeleter
 	{
-		[MenuItem( "Assets/Delete .unitypackage Assets" )]
+		//================================================================================
+		// 関数（static）
+		//================================================================================
+		[MenuItem( "Assets/UniPackageAssetDeleter/選択した .unitypackage からインポートしたアセットを削除" )]
 		private static void Run()
 		{
 			var path = EditorUtility.OpenFilePanel( string.Empty, string.Empty, "unitypackage" );
 
-			if ( !path.EndsWith( ".unitypackage" ) ) return;
-			if ( string.IsNullOrWhiteSpace( path ) ) return;
+			if ( !path.EndsWith( ".unitypackage" ) )
+			{
+				//Debug.LogWarning( "選択されたファイルが .unitypackage ではありません" );
+				return;
+			}
+
+			if ( string.IsNullOrWhiteSpace( path ) )
+			{
+				//Debug.LogWarning( "選択されたファイルが .unitypackage ではありません" );
+				return;
+			}
 
 			var unityPackageFilename = Path.GetFileName( path );
 			var unityPackageGuidList = GetGuidListFromUnityPackage( path );
